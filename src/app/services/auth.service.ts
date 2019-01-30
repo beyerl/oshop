@@ -10,10 +10,9 @@ export class AuthService {
   constructor(public afAuth: AngularFireAuth) {  }
 
   login(){
-    console.log("login");
-    this.afAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
+    return this.afAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
   }
-  /*logout(){
-    this.afAuth.auth.signOut();
-  }*/
+  logout(){
+    return this.afAuth.auth.signOut();
+  }
 }

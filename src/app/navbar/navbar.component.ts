@@ -8,16 +8,31 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  isNavbarCollapsed = true;
+  private isNavbarCollapsed = true;
 
-  constructor(public authService: AuthService, private router: Router) { }
+  private isLoggedIn: boolean;
+  public user = this.authService.afAuth.user;
+  
+  constructor(public authService: AuthService, private router: Router) { 
+    this.user.subscribe(
+      (user) => {
+        if (user) {
+          this.isLoggedIn = true;
+          this.router.navigate(['']);
+        }
+        else {
+          this.isLoggedIn = false;
+          this.router.navigate(['login']);
+        }
+      }     
+    )
+  }
 
   ngOnInit() {
   }
 
-  /*logout(){
+  logout(){
     this.authService.logout();
     this.router.navigate(['login']);
-  }*/
-
+  }
 }
