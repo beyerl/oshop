@@ -6,6 +6,7 @@ import { auth } from 'firebase';
   providedIn: 'root'
 })
 export class AuthService {
+  private user = this.afAuth.user;
 
   constructor(public afAuth: AngularFireAuth) {  }
 

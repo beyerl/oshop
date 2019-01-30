@@ -1,3 +1,4 @@
+import { DbService } from './../services/db.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -11,13 +12,21 @@ export class NavbarComponent implements OnInit {
   private isNavbarCollapsed = true;
 
   private isLoggedIn: boolean;
-  public user = this.authService.afAuth.user;
+  private user = this.authService.afAuth.user;
+  public userData = {name: null, email: null, isAdmin: null}
   
-  constructor(public authService: AuthService, private router: Router) { 
+  constructor(public authService: AuthService, private router: Router, private db : DbService) { 
     this.user.subscribe(
       (user) => {
         if (user) {
           this.isLoggedIn = true;
+
+          this.userData.name = user.displayName;
+          this.userData.email = user.email;
+          this.userData.isAdmin = true;
+
+          db.add(this.userData);
+
           this.router.navigate(['']);
         }
         else {
@@ -32,7 +41,8 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(){
-    this.authService.logout();
+    this.authService.logout(); 
+    
     this.router.navigate(['login']);
   }
 }
