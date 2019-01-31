@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase';
 import { DbService } from './db.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class AuthService {
   //public isLoggedIn = false;
   public moshUser$: Observable<firebase.User>;
 
-  constructor(public afAuth: AngularFireAuth, private db : DbService, private route: ActivatedRoute) { 
+  constructor(public afAuth: AngularFireAuth, private db : DbService, public database : AngularFireDatabase,private route: ActivatedRoute) { 
     this.moshUser$ = this.afAuth.authState;
 
     /*this.user
@@ -53,5 +55,16 @@ export class AuthService {
   }
   logout(){
     this.afAuth.auth.signOut();
+  }
+  get appUser$(){
+    return this.moshUser$.pipe(
+      switchMap(user =>
+        {
+          if (user){
+            return this.database.object('/users/'+ user.uid).valueChanges();
+          } else{
+            return of(null);
+          }
+        }))
   }
 }

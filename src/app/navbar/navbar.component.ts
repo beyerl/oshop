@@ -2,6 +2,8 @@ import { DbService } from './../services/db.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { auth } from 'firebase';
+import { AppUser } from '../models/app-user';
 
 @Component({
   selector: 'app-navbar',
@@ -11,10 +13,12 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   private isNavbarCollapsed = true;
 
+  appUser: AppUser;
   private username : string;
-  private user = this.authService.user;
+  //private user = this.authService.user;
   
-  constructor(public authService: AuthService, private router: Router) { 
+  constructor(public authService: AuthService, private router: Router) {
+    authService.appUser$.subscribe(appUser => this.appUser = appUser)
     /*this.user.subscribe(
       (user) => {
         if (user) {
