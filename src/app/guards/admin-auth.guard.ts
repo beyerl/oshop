@@ -14,13 +14,11 @@ import { AngularFireDatabase } from '@angular/fire/database';
 export class AdminAuthGuard implements CanActivate {
 
   constructor(
-    private router: Router,
     private authService: AuthService,
-    private db: DbService,
   ){  }
 
   canActivate() {
-    return this.authService.moshUser$.pipe(
+    return this.authService.user$.pipe(
       switchMap(user =>
         {
           if (user){
@@ -33,25 +31,4 @@ export class AdminAuthGuard implements CanActivate {
       map(appUser => appUser.isAdmin)
     )
   }
-
-  /*console.log(this.authService.afAuth.auth.currentUser)
-    let uid = this.authService.afAuth.auth.currentUser.uid;
-    return this.db.get(uid)
-    .valueChanges()
-    .pipe(map((appUser: AppUser) => appUser.isAdmin));*/
-
-  /*canActivate(): Observable<boolean> {
-    return this.authService.moshUser$
-      .pipe(
-        switchMap(user => {return this.db.get(user.uid).valueChanges()}
-        )).pipe*/
-    /*console.log("isAdmin: " + this.authService.userData.isAdmin); 
-    if (this.authService.userData.isAdmin) {
-      return true;
-    }
-    else {
-      this.router.navigate(['']);
-      return false
-    }*/
-  //}
 }

@@ -15,16 +15,12 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(route, state: RouterStateSnapshot){
-    return this.authService.moshUser$.pipe(
+    return this.authService.user$.pipe(
       map(user => {
         if (user) return true;
   
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
         return false;
       }));
-    /*if (this.authService.isLoggedIn) return true;
-
-    this.router.navigate(['/login']);
-    return false;*/
   }
 }

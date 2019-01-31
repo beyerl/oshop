@@ -11,40 +11,10 @@ import { AngularFireDatabase } from '@angular/fire/database';
   providedIn: 'root'
 })
 export class AuthService {
-  public user = this.afAuth.user;
-  public userData = {name: null, email: null, isAdmin: null};
-  //public isLoggedIn = false;
-  public moshUser$: Observable<firebase.User>;
+  public user$: Observable<firebase.User>;
 
-  constructor(public afAuth: AngularFireAuth, private db : DbService, public database : AngularFireDatabase,private route: ActivatedRoute) { 
-    this.moshUser$ = this.afAuth.authState;
-
-    /*this.user
-    .subscribe(
-      (user) => {
-        if (user) {
-          this.userData.name = user.displayName;
-          this.userData.email = user.email;
-          this.userData.isAdmin = true;
-
-          db.add(this.userData);
-        }
-      }
-    )*/
-
-    /*this.afAuth.authState
-    .subscribe(
-      (user) => {      
-        if (user && user.uid){
-          console.log("isLoggedIn: " + this.isLoggedIn)
-          this.isLoggedIn = true;
-        }
-        else {
-          console.log("isLoggedIn: "  + this.isLoggedIn)
-          this.isLoggedIn = false; 
-        }
-      }
-    )*/
+  constructor(public afAuth: AngularFireAuth, public database : AngularFireDatabase,private route: ActivatedRoute) { 
+    this.user$ = this.afAuth.authState;
    }
 
   login(){
@@ -57,7 +27,7 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
   get appUser$(){
-    return this.moshUser$.pipe(
+    return this.user$.pipe(
       switchMap(user =>
         {
           if (user){

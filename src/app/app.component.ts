@@ -9,13 +9,14 @@ import { DbService } from './services/db.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private dbService: DbService, private authService: AuthService, router: Router) {
-    authService.moshUser$.subscribe(user => {
+  constructor(private db: DbService, private authService: AuthService, router: Router) {
+    authService.user$.subscribe(user => {
       if(user) {
-        dbService.save(user);
+        db.save(user);
 
         let returnUrl = localStorage.getItem('returnUrl');
-        router.navigateByUrl(returnUrl);
+        if (returnUrl) router.navigateByUrl(returnUrl);
+        localStorage.setItem('returnUrl', '');
       }
     })
   }

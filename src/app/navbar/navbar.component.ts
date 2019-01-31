@@ -10,28 +10,13 @@ import { AppUser } from '../models/app-user';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   private isNavbarCollapsed = true;
 
   appUser: AppUser;
-  private username : string;
-  //private user = this.authService.user;
   
   constructor(public authService: AuthService, private router: Router) {
     authService.appUser$.subscribe(appUser => this.appUser = appUser)
-    /*this.user.subscribe(
-      (user) => {
-        if (user) {
-          this.username = this.authService.userData.name;
-
-          this.router.navigate(['']);
-        }
-      }
-    )*/
-  }
-
-  ngOnInit() {
-
   }
 
   logout(){

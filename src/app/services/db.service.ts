@@ -1,6 +1,6 @@
+import { AppUser } from './../models/app-user';
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { Observable } from 'rxjs';
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
 
 @Injectable({
   providedIn: 'root'
@@ -20,21 +20,7 @@ export class DbService {
     })
   }
 
-  get(uid: string){
+  get(uid: string): AngularFireObject<AppUser> {
     return this.db.object('/users/' + uid);
   }
-
-  /*add(userData : {name: string, email: string, isAdmin: boolean}) {
-    this.userDb.orderByChild('email').equalTo(userData.email)
-      .on("value", 
-        (snapshot) => {
-          if (!snapshot.val()){
-            this.users.push(userData)
-            .then(() => {
-              console.log(userData.name + " added")
-            })  
-          }
-        },
-      )
-  }*/
 }
