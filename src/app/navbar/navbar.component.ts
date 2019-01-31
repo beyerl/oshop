@@ -11,33 +11,23 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   private isNavbarCollapsed = true;
 
-  private isLoggedIn: boolean;
-  private user = this.authService.afAuth.user;
-  public userData = {name: null, email: null, isAdmin: null}
+  private username : string;
+  private user = this.authService.user;
   
-  constructor(public authService: AuthService, private router: Router, private db : DbService) { 
+  constructor(public authService: AuthService, private router: Router) { 
     this.user.subscribe(
       (user) => {
         if (user) {
-          this.isLoggedIn = true;
-
-          this.userData.name = user.displayName;
-          this.userData.email = user.email;
-          this.userData.isAdmin = true;
-
-          db.add(this.userData);
+          this.username = this.authService.userData.name;
 
           this.router.navigate(['']);
         }
-        else {
-          this.isLoggedIn = false;
-          this.router.navigate(['login']);
-        }
-      }     
+      }
     )
   }
 
   ngOnInit() {
+
   }
 
   logout(){
