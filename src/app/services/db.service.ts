@@ -13,7 +13,18 @@ export class DbService {
     this.users = this.db.list('/users');
   }
 
-  add(userData : {name: string, email: string, isAdmin: boolean}) {
+  save(user: firebase.User){
+    this.db.object('/users/' + user.uid).update({
+      name: user.displayName,
+      email: user.email
+    })
+  }
+
+  get(uid: string){
+    return this.db.object('/users/' + uid);
+  }
+
+  /*add(userData : {name: string, email: string, isAdmin: boolean}) {
     this.userDb.orderByChild('email').equalTo(userData.email)
       .on("value", 
         (snapshot) => {
@@ -25,5 +36,5 @@ export class DbService {
           }
         },
       )
-  }
+  }*/
 }

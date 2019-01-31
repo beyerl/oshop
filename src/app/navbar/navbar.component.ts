@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
   private user = this.authService.user;
   
   constructor(public authService: AuthService, private router: Router) { 
-    this.user.subscribe(
+    /*this.user.subscribe(
       (user) => {
         if (user) {
           this.username = this.authService.userData.name;
@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
           this.router.navigate(['']);
         }
       }
-    )
+    )*/
   }
 
   ngOnInit() {

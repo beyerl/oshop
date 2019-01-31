@@ -22,6 +22,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
+import { DbService } from './services/db.service';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,10 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
         component: HomeComponent 
       },
       { 
+        path: 'login',
+        component: LoginComponent
+      },
+      { 
         path: 'products',
         component: ProductsComponent,
         canActivate: [AuthGuard] 
@@ -57,6 +62,7 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
         path: 'shopping-cart', 
         component: ShoppingCartComponent
       },
+
       { 
         path: 'check-out',
         component: CheckOutComponent,
@@ -71,10 +77,6 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
         path: 'my/orders',
         component: MyOrdersComponent,
         canActivate: [AuthGuard] 
-      },
-      { 
-        path: 'login',
-        component: LoginComponent
       },
       { 
         path: 'admin/products',
@@ -92,7 +94,10 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
       },
     ])
   ],
-  providers: [AuthService],
+  providers: [AuthService,
+    DbService, 
+    AuthGuard, 
+    AdminAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

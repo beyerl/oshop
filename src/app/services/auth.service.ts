@@ -1,7 +1,9 @@
+import { ActivatedRoute } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase';
 import { DbService } from './db.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +11,13 @@ import { DbService } from './db.service';
 export class AuthService {
   public user = this.afAuth.user;
   public userData = {name: null, email: null, isAdmin: null};
-  public isLoggedIn = false;
+  //public isLoggedIn = false;
+  public moshUser$: Observable<firebase.User>;
 
-  constructor(public afAuth: AngularFireAuth, private db : DbService) { 
-    this.user
+  constructor(public afAuth: AngularFireAuth, private db : DbService, private route: ActivatedRoute) { 
+    this.moshUser$ = this.afAuth.authState;
+
+    /*this.user
     .subscribe(
       (user) => {
         if (user) {
@@ -23,12 +28,12 @@ export class AuthService {
           db.add(this.userData);
         }
       }
-    )
+    )*/
 
-    this.afAuth.authState
+    /*this.afAuth.authState
     .subscribe(
-      (response) => {
-        if (response && response.uid){
+      (user) => {      
+        if (user && user.uid){
           console.log("isLoggedIn: " + this.isLoggedIn)
           this.isLoggedIn = true;
         }
@@ -37,15 +42,16 @@ export class AuthService {
           this.isLoggedIn = false; 
         }
       }
-    )
+    )*/
    }
 
   login(){
-    return this.afAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
+    let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+    localStorage.setItem('returnUrl', returnUrl);
+
+    this.afAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
   }
   logout(){
-    return this.afAuth.auth.signOut();
+    this.afAuth.auth.signOut();
   }
-
-
 }
