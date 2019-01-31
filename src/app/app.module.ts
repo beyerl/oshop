@@ -19,6 +19,10 @@ import { AdminProductsComponent } from './admin/admin-products/admin-products.co
 import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.component';
 import { OrderSuccessComponent } from './order-success/order-success.component';
 import { LoginComponent } from './login/login.component';
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
+import { DbService } from './services/db.service';
 
 @NgModule({
   declarations: [
@@ -46,36 +50,43 @@ import { LoginComponent } from './login/login.component';
         component: HomeComponent 
       },
       { 
+        path: 'login',
+        component: LoginComponent
+      },
+      { 
         path: 'products',
-        component: ProductsComponent 
+        component: ProductsComponent,
+        canActivate: [AuthGuard] 
       },
       { 
         path: 'shopping-cart', 
-        component: ShoppingCartComponent 
+        component: ShoppingCartComponent
       },
+
       { 
         path: 'check-out',
-        component: CheckOutComponent 
+        component: CheckOutComponent,
+        canActivate: [AuthGuard]  
       },
       { 
         path: 'order-success',
-        component: OrderSuccessComponent 
+        component: OrderSuccessComponent,
+        canActivate: [AuthGuard]  
       },
       { 
         path: 'my/orders',
-        component: MyOrdersComponent
-      },
-      { 
-        path: 'login',
-        component: LoginComponent 
+        component: MyOrdersComponent,
+        canActivate: [AuthGuard] 
       },
       { 
         path: 'admin/products',
-        component: AdminProductsComponent 
+        component: AdminProductsComponent,
+        canActivate: [AuthGuard, AdminAuthGuard]  
       },
       { 
         path: 'admin/orders',
-        component: AdminOrdersComponent
+        component: AdminOrdersComponent,
+        canActivate: [AuthGuard, AdminAuthGuard] 
       },
       { 
         path: '**',
@@ -83,7 +94,10 @@ import { LoginComponent } from './login/login.component';
       },
     ])
   ],
-  providers: [],
+  providers: [AuthService,
+    DbService, 
+    AuthGuard, 
+    AdminAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
